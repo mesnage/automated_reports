@@ -3,8 +3,9 @@ library(markdown)
 library(rmarkdown)
 library(pagedown)
 
+
 raw_data <- read.csv("~/dataset.csv", stringsAsFactors = FALSE)
-for (i in 1:nrow(raw_data))
+for (i in 1:1)
 {
 
   out <- render('~/personal_reports_pagedown.Rmd', 'pagedown::html_letter')
