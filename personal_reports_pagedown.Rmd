@@ -1,0 +1,127 @@
+---
+output:
+  pagedown::html_letter:
+    self_contained: false
+knit: pagedown::chrome_print
+---
+
+<style>
+
+div.a {
+  text-indent: 50px;
+}
+
+.logo_letter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+</style>
+
+```{r parametrisation, echo=FALSE, warning=FALSE}
+library(ggplot2)
+
+low_ref = 1
+high_ref = 2
+
+patient_id_vector <- unique(raw_data$record_id)
+```
+
+<img style="float: right; width:35%" alt="" class="logo_letter" src="mylogo.png" />
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+::: from
+NAME  
+Address Line 1 
+Address Line 2  
+Telephone number
+Email
+:::
+
+::: date
+Month Day, Year
+:::
+<br>
+
+```{r insertname, echo=FALSE, warning=FALSE, results='asis'}
+patient_id <- patient_id_vector[i]
+patient_value <- raw_data[raw_data$record_id == patient_id,]
+fullname <- patient_value[1,2]
+
+cat('Dear ')
+mycat <- function(text){
+  cat(gsub(pattern = "&", replacement = "  \n", x = text))
+}
+
+mycat(fullname)
+cat(',')
+```
+
+<br>
+
+<div class="a"><p>     We thank you for your participation to the study and XXXXXXXXXX. </p>
+
+<p>     We had promised to give you a personal report and this is what you find enclosed. You will see the values of the whole cohort and highlighted in red your value at the beginning and the end of the intervention with a short comment. We are thankful for your contribution. </p>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<h3> 1/ Some background explanations </h3>
+
+<div class="a"> <p>First of all, some background information </p> </div>
+
+<br>
+<br>
+
+
+<h3> 2/ Your personal profile </h3> 
+
+```{r figure, echo=FALSE, warning=FALSE, dpi = 300}
+
+   patient_id <- patient_id_vector[i]
+ patient_value <- raw_data[raw_data$record_id == patient_id,]
+
+ 
+ b <- runif(nrow(raw_data), -0.1, 0.1)
+ggplot() + ylab("Parameter \n(unit)") +
+   geom_boxplot(data = raw_data, aes(x = as.numeric(prepost), y = parameter, group = prepost), color="black", fill = '#1DA1F2', alpha = 0.5, outlier.color = 'white') +
+   geom_point(data = raw_data, aes(x = as.numeric(prepost) + b, y = parameter), colour="black", size=1, alpha=0.2) +
+   geom_line(data = raw_data, aes(x  = as.numeric(prepost) + b, y = parameter, group = record_id), colour="black", alpha=0.3, linetype="11") +
+   scale_x_continuous(breaks = c(1,2), labels = c("before", "after")) + 
+   xlab("") + theme_bw() + 
+   geom_point(data = patient_value, aes(x = as.numeric(prepost), y = parameter), colour="red", size=2) +
+   geom_line(data = patient_value, aes(x  = as.numeric(prepost), y = parameter, group = record_id), colour="red")  +
+  geom_rect(aes(ymin=low_ref, ymax=high_ref, xmin=-Inf, xmax=Inf), alpha = 0.2)
+ 
+
+ 
+
+```
+
